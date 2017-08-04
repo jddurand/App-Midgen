@@ -313,6 +313,7 @@ sub _eval_info {
 		if ($ppi_sb->{children}[$_]->isa('PPI::Statement::Include')) {
 			my $ppi_si = $ppi_sb->{children}[$_]
 				if $ppi_sb->{children}[$_]->isa('PPI::Statement::Include');
+			next unless $ppi_si;
 			if ( $ppi_si->{children}[0]->isa('PPI::Token::Word')
 				&& $ppi_si->{children}[0]->content eq 'require')
 			{
@@ -320,11 +321,13 @@ sub _eval_info {
 					if $ppi_si->{children}[2]->isa('PPI::Token::Word');
 			}
 		}
+		next unless ${$mn_ref};
 
 		# find version string if we previously found a name
 		if ($ppi_sb->{children}[$_]->isa('PPI::Statement')) {
 			my $ppi_s = $ppi_sb->{children}[$_]
 				if $ppi_sb->{children}[$_]->isa('PPI::Statement');
+			next unless $ppi_s;
 			if (
 				(
 					    $ppi_s->{children}[0]->isa('PPI::Token::Word')
@@ -336,6 +339,7 @@ sub _eval_info {
 			{
 				my $ppi_sl = $ppi_s->{children}[3]
 					if $ppi_s->{children}[3]->isa('PPI::Structure::List');
+				next unless $ppi_sl;
 				${$vs_ref} = $ppi_sl->{children}[0]->{children}[0]->content;
 			}
 		}
