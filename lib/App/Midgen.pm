@@ -439,7 +439,7 @@ sub _process_found_modules {
 	p $require_type if $self->debug;
 
 	#deal with ''
-	next if $module eq NONE;
+	return if $module eq NONE;
 
 	# let's show every thing we can find infile
 	if ($self->format ne 'infile') {
@@ -449,22 +449,22 @@ sub _process_found_modules {
 		if ($module =~ /perl/sxm) {
 
 			# ignore perl we will get it from minperl required
-			next;
+			return;
 		}
 		elsif ($module =~ /\A\Q$distribution_name\E/sxm) {
 
 			# don't include our own packages here
-			next;
+			return;
 		}
 		elsif ($module =~ /^t::/sxm) {
 
 			# don't include our own test packages here
-			next;
+			return;
 		}
 		elsif ($module =~ /^inc::Module::Install/sxm) {
 
 			# don't inc::Module::Install as it is really Module::Install
-			next;
+			return;
 		}
 		elsif ($module =~ /Mojo/sxm) {
 			if ($self->experimental) {
@@ -474,7 +474,7 @@ sub _process_found_modules {
 						print "swapping out $module for Mojolicious\n";
 						print CLEAR;
 					}
-					next;
+					return;
 				}
 			}
 		}
@@ -495,7 +495,7 @@ sub _process_found_modules {
 	# don't process already found modules
 	p $self->{modules}{$module}{prereqs} if $self->debug;
 
-	next if defined $self->{modules}{$module}{prereqs};
+	return if defined $self->{modules}{$module}{prereqs};
 	p $module if $self->debug;
 
 	# add skip for infile as we don't need to get v-string from metacpan-api
