@@ -24,8 +24,7 @@ use Time::Stamp 'gmstamp';
 #######
 
 # Encode and decode JSON
-use JSON::Tiny;
-my $json = JSON::Tiny->new;
+use JSON::Tiny qw/decode_json encode_json/;
 
 use File::Spec;
 use File::Slurp::Tiny qw(read_file write_file);
@@ -34,7 +33,7 @@ my $midgenrc = File::Spec->catfile($ENV{HOME}, '.midgenrc');
 
 my $config;
 if (-e $midgenrc) {
-	$config = $json->decode(read_file($midgenrc));
+	$config = decode_json(read_file($midgenrc));
 }
 
 #######
@@ -104,7 +103,7 @@ $midgen->run();
 # write config to ~/.midgenrc
 #######
 if ($write) {
-	my $midgenrc_data = $json->encode(
+	my $midgenrc_data = encode_json(
 		{
 			author    => $author,
 			core      => $core,
